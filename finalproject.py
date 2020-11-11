@@ -15,7 +15,7 @@ class store():
             price(int): price of item
             amount(int): number of items in inventory
         Returns:
-            dictionary of inventory
+            final_inventory(dict) : dictionary of all items
         """
     
     def addinventory(self, filename):
@@ -23,6 +23,8 @@ class store():
         
         Args:
             filename (str): name of file
+        Returns:
+            final_updated_inventory(dict): returns updated inventory
         """
 
     def order(self, limit=10):
@@ -30,6 +32,8 @@ class store():
     
     Args:
         limit(int): amount of inventory that the user needs to order more at
+    Returns:
+        order_list(list): list of items that need to be ordered 
     
     '''
     
