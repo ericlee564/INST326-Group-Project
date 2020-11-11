@@ -28,7 +28,25 @@ class store():
     
     Args:
         limit(int): amount of inventory that the user needs to order more at
+    
     '''
+    
+    def stocked(limit,categories):
+        """
+        This function keeps tracks of how many item we have in our current stock 
+        by different categories
+        Agrs:
+            limit(int): Number of items store have in the stock
+            categories(list): different categories in the stock
+        
+        """
+    def num_item_sold(item, amountsold):
+        """This function keeps tracks of number of all items sold 
+            item(int): different item types in the stock
+            amountsold(int): number of items sold 
+           
+        """    
+        
     
     
     
