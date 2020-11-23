@@ -1,13 +1,17 @@
 #Hyungik Lee, David McCoy, Noah Berman, Kiranpreet Kaur
 
+from argparse import ArgumentParser
+import sys
+
 class store():
     """Creates a dictionary of inventory from given file
     Attributes:
         """
     def __init__(self):
         self.inventory = dict()
+        
     def inventory(self, item, price, amount):
-        """ Creates a dictionary of all products within the store and its prices
+         """ Creates a dictionary of all products within the store and its prices
         
         Args:
             item(str): string of item name
@@ -37,14 +41,14 @@ class store():
                 self.inventory['Item'] = item
                 self.inventory['Item'][item] = {'Price': price, 'Amount': amount, 'Category': category}
     def order(self, limit=10):
-    '''Creates an inventory of items that are running low
+    """Creates an inventory of items that are running low
     
     Args:
         limit(int): amount of inventory that the user needs to order more at
     Returns:
-        order_list(list): list of items that need to be ordered 
-    
-    '''
+        order_list(list): list of items that need to be ordered
+    """
+
         if self.inventory['Amount'] =< limit:
             return f'Order more {self.inventory['Item']}'
         else:
@@ -81,6 +85,17 @@ def coupon_generator(item, category):
         category (str): type of category of food within grocery store
     Returns:
         String of the item discounted"""
+
+def parse_args(arglist):
+    """ Parse command-line arguments. """
+    parser = ArgumentParser()
+    parser.add_argument("filename", help="path to Inventory CSV file")
+    return parser.parse_args(arglist)
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
+    main(args.file)
+
     
     
     
