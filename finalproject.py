@@ -4,9 +4,8 @@ class store():
     """Creates a dictionary of inventory from given file
     Attributes:
         """
-    def __init__(self, products):
-
-
+    def __init__(self):
+        self.inventory = dict()
     def inventory(self, item, price, amount):
         """ Creates a dictionary of all products within the store and its prices
         
@@ -26,7 +25,17 @@ class store():
         Returns:
             final_updated_inventory(dict): returns updated inventory
         """
-
+        with open(filename, 'r', encoding = 'utf-8') as f:
+            headers = next(f)
+            for line in f:
+                strip = line.strip()
+                split = strip.split(',')
+                item = split[0]
+                price = split[1]
+                amount = split[2]
+                category = split[3]
+                self.inventory['Item'] = item
+                self.inventory['Item'][item] = {'Price': price, 'Amount': amount, 'Category': category}
     def order(self, limit=10):
     '''Creates an inventory of items that are running low
     
@@ -36,7 +45,11 @@ class store():
         order_list(list): list of items that need to be ordered 
     
     '''
-    
+        if self.inventory['Amount'] =< limit:
+            return f'Order more {self.inventory['Item']}'
+        else:
+            pass
+        
 def stocked(limit,categories):
     """
     This function keeps tracks of how many item we have in our current stock 
