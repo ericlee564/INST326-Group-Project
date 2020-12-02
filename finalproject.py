@@ -88,7 +88,7 @@ def num_item_sold(item, amountsold):
        
 def main(filename):
     e = StoreInventory(filename)
-    limit =< 10
+    limit <= 10
     return e.order_more(limit)
 
 def parse_args(arglist):
