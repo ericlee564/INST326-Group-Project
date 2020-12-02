@@ -3,24 +3,19 @@
 from argparse import ArgumentParser
 import sys
 
-class store():
+class StoreInventory():
     """Creates a dictionary of inventory from given file
     Attributes:
         """
-    def __init__(self):
-        self.inventory = dict()
-        
-    def inventory(self, item, price, amount):
-         """ Creates a dictionary of all products within the store and its prices
-        
-        Args:
-            item(str): string of item name
-            price(int): price of item
-            amount(int): number of items in inventory
-        Returns:
-            final_inventory(dict) : dictionary of all items
-        """
-    
+    def __init__(self, filename):
+        self.conn = sqlite3.connect(':memory:')
+        self.addinventory(filename)
+    def __del__(self):
+        """ Clean up the database connection. """
+        try:
+            self.conn.close()
+        except:
+            pass
     def addinventory(self, filename):
         """ Allows employees to add products to current inventory list
         
@@ -29,30 +24,24 @@ class store():
         Returns:
             final_updated_inventory(dict): returns updated inventory
         """
+        cursor = self.conn.cursor()
+        cq = '''CREATE TABLE inventory
+                (item text, price real, amount integer, category text)'''
+        cursor.execute(cq)
         with open(filename, 'r', encoding = 'utf-8') as f:
             headers = next(f)
-            for line in f:
-                strip = line.strip()
-                split = strip.split(',')
-                item = split[0]
-                price = split[1]
-                amount = split[2]
-                category = split[3]
-                self.inventory['Item'] = item
-                self.inventory['Item'][item] = {'Price': price, 'Amount': amount, 'Category': category}
-    def order(self, limit=10):
-    """Creates an inventory of items that are running low
-    
-    Args:
-        limit(int): amount of inventory that the user needs to order more at
-    Returns:
-        order_list(list): list of items that need to be ordered
-    """
-
-        if self.inventory['Amount'] =< limit:
-            return f'Order more {self.inventory['Item']}'
-        else:
-            pass
+            for row in f:
+                values = row.split(',')
+                data = (values[0], float(values[1]), int(values[2]), values[3])
+                item, price, amount, category = data
+                iq = '''INSERT INTO inventory VALUES (?,?,?,?)'''
+                cursor.execute(iq, data)
+        self.conn.commit()
+    def order_more(self, limit):
+        cursor = self.conn.cursor()
+        sq = f"SELECT item FROM inventory WHERE amount = {limit}"
+        goods = cursor.execute(sq).fetchall()
+        print(goods)
         
 def stocked(limit,categories):
     """
@@ -85,6 +74,11 @@ def coupon_generator(item, category):
         category (str): type of category of food within grocery store
     Returns:
         String of the item discounted"""
+        
+def main(filename):
+    e = StoreInventory(filename)
+    limit = 10
+    return e.order_more(limit)
 
 def parse_args(arglist):
     """ Parse command-line arguments. """
@@ -94,7 +88,7 @@ def parse_args(arglist):
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
-    main(args.file)
+    main(args.filename)
 
     
     
