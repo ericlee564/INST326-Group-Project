@@ -43,38 +43,38 @@ class StoreInventory():
         goods = cursor.execute(sq).fetchall()
         print(goods)
         
-def stocked(limit,categories):
-    """
-    This function keeps tracks of how many item we have in our current stock 
-    by different categories
-    Args:
-        limit(int): Number of items store have in the stock
-        categories(list): different categories in the stock
+    def stocked(limit,categories):
+        """
+        This function keeps tracks of how many item we have in our current stock 
+        by different categories
+        Args:
+            limit(int): Number of items store have in the stock
+            categories(list): different categories in the stock
     
-    """
-    
-def num_item_sold(item, amountsold):
-    """This function keeps tracks of number of all items sold 
-    Args:
-        item(int): different item types in the stock
-        amountsold(int): number of items sold 
-    """    
-        
-def item_discount(total_cost):
-    """Generates a discount on the items ordered
-    Args:
-        total_cost (float): total cost of all items ordered
-    Returns: 
-        String with the given discount for specific product"""
-        
-def coupon_generator(item, category):
+        """
+
+    def coupon_generator(item, category):
     """Creates coupon for specific category of food
     Args:
         item (str): name of item for coupon
         category (str): type of category of food within grocery store
     Returns:
         String of the item discounted"""
-        
+
+    def item_discount(total_cost):
+    """Generates a discount on the items ordered
+    Args:
+        total_cost (float): total cost of all items ordered
+    Returns: 
+        String with the given discount for specific product"""
+    
+def num_item_sold(item, amountsold):
+    """This function keeps tracks of number of all items sold and updates the database 
+    Args:
+        item(int): different item types in the stock
+        amountsold(int): number of items sold 
+    """    
+       
 def main(filename):
     e = StoreInventory(filename)
     limit = 10
