@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser
 import sys
+import sqlite3
 
 class StoreInventory():
     """Creates a database connection of an inventory from given file and uses different
