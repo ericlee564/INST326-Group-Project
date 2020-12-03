@@ -66,7 +66,8 @@ class StoreInventory():
         """
 
     def coupon_generator(item, category):
-        """Creates coupon for specific category of food
+        """Creates coupon for specific category of food based off how much is left
+        in the inventory
         Args:
             item (str): name of item for coupon
             category (str): type of category of food within grocery store
@@ -75,7 +76,8 @@ class StoreInventory():
         """
 
     def item_discount(total_cost):
-        """Generates a discount on the items ordered
+        """Generates a discount on the items ordered and allows 
+        customer to pay reduced price for product. Updates total cost.
         Args:
             total_cost (float): total cost of all items ordered
         Returns: 
