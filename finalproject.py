@@ -5,8 +5,10 @@ import sys
 import sqlite3
 
 class StoreInventory():
-    """Creates a dictionary of inventory from given file
+    """Creates a database connection of an inventory from given file and uses different
+    capabilities to let the user work with the inventory
     Attributes:
+        self.conn: in memory database connection
         """
     def __init__(self, filename):
         self.conn = sqlite3.connect(':memory:')
@@ -18,12 +20,12 @@ class StoreInventory():
         except:
             pass
     def addinventory(self, filename):
-        """ Allows employees to add products to current inventory list
+        """ Creates a database of an inventory using a csv file
         
         Args:
             filename (str): name of file
-        Returns:
-            final_updated_inventory(dict): returns updated inventory
+        Side Effects:
+            Creation of database
         """
         cursor = self.conn.cursor()
         cq = '''CREATE TABLE inventory
@@ -39,6 +41,15 @@ class StoreInventory():
                 cursor.execute(iq, data)
         self.conn.commit()
     def order_more(self, limit):
+        '''Print the name of item that is running low. The amount that is defined as running
+        low is based on the limit.
+        
+        Arg:
+            limit(int): integer number of when the user thinks an item amount is too low
+        
+        Return:
+            List of items that are equal to the limit. 
+        '''
         cursor = self.conn.cursor()
         sq = f"SELECT item FROM inventory WHERE amount = {limit}"
         goods = cursor.execute(sq).fetchall()
@@ -78,7 +89,7 @@ def num_item_sold(item, amountsold):
        
 def main(filename):
     e = StoreInventory(filename)
-    limit = 10
+    limit <= 10
     return e.order_more(limit)
 
 def parse_args(arglist):
