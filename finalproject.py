@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser
 import sys
+import sqlite3
 
 class StoreInventory():
     """Creates a dictionary of inventory from given file
@@ -54,20 +55,20 @@ class StoreInventory():
         """
 
     def coupon_generator(item, category):
-    """Creates coupon for specific category of food
-    Args:
-        item (str): name of item for coupon
-        category (str): type of category of food within grocery store
-    Returns:
-        String of the item discounted"""
+        """Creates coupon for specific category of food
+        Args:
+            item (str): name of item for coupon
+            category (str): type of category of food within grocery store
+        Returns:
+            String of the item discounted"""
 
     def item_discount(total_cost):
-    """Generates a discount on the items ordered
-    Args:
-        total_cost (float): total cost of all items ordered
-    Returns: 
-        String with the given discount for specific product"""
-    
+        """Generates a discount on the items ordered
+        Args:
+            total_cost (float): total cost of all items ordered
+        Returns: 
+            String with the given discount for specific product"""
+        
 def num_item_sold(item, amountsold):
     """This function keeps tracks of number of all items sold and updates the database 
     Args:
