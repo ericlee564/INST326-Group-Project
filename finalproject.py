@@ -62,7 +62,7 @@ class StoreInventory():
         Args:
             filename (str): name of the file 
         Return: 
-            list of items on the basis of different categories     
+            It returns the dictionary where item type is key and the amount is value.    
         """
 
     def coupon_generator(item, category):
