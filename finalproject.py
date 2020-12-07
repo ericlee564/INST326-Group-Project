@@ -49,7 +49,7 @@ class StoreInventory():
             limit(int): integer number of when the user thinks an item amount is too low
         
         Return:
-            List of items that are equal to the limit. 
+            String of items that are equal to the limit. 
         '''
         cursor = self.conn.cursor()
         sq = f"SELECT item FROM inventory WHERE amount = {limit}"
