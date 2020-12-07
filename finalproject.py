@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 import sys
 import sqlite3
+import pandas as pd
 
 class StoreInventory():
     """Creates a database connection of an inventory from given file and uses different
@@ -56,14 +57,17 @@ class StoreInventory():
         print(goods)
         
     def stocked(filename):
-         """
+        """
         This function keeps tracks of how many item we have in our current stock 
         by different categories
         Args:
-            filename (str): name of the file 
-        Return: 
-            It returns the dictionary where item type is key and the amount is value.    
+            filename (str): name of the file     
         """
+        data = pd.read_csv("inventory.csv", sep=",",index_col="Category")
+        cols =["Item Name","Amount"]
+        df2 = data[cols]
+        print("Number of items in the current stock\n")
+        print (df2)
 
     def coupon_generator(item, category):
         """Creates coupon for specific category of food based off how much is left
@@ -104,6 +108,9 @@ def parse_args(arglist):
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
     main(args.filename)
+    x = StoreInventory("inventory.csv")
+    g = x.stocked()
+    print (g)
 
     
     
