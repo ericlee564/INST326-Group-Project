@@ -54,7 +54,9 @@ class StoreInventory():
         cursor = self.conn.cursor()
         sq = f"SELECT item FROM inventory WHERE amount = {limit}"
         goods = cursor.execute(sq).fetchall()
-        print(goods)
+        for good in goods:
+            for item in good:
+                print(f'Order more {item}')
         
     def stocked(filename):
         """
