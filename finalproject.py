@@ -58,7 +58,7 @@ class StoreInventory():
             for item in good:
                 print(f'Order more {item}')
         
-    def stocked(filename):
+    def stocked(self,filename):
         """
         This function keeps tracks of how many item we have in our current stock 
         by different categories
@@ -66,12 +66,12 @@ class StoreInventory():
             filename (str): name of the file     
         """
         data = pd.read_csv("inventory.csv", sep=",",index_col="Category")
-        cols =["Item Name","Amount"]
+        cols =["Item Name","Amount","Price ($)"]
         df2 = data[cols]
         print("Number of items in the current stock\n")
         print (df2)
 
-    def coupon_generator(item, category):
+    def coupon_generator(self,item, category):
         """Creates coupon for specific category of food based off how much is left
         in the inventory
         Args:
@@ -81,7 +81,7 @@ class StoreInventory():
             String of the item discounted
         """
 
-    def item_discount(total_cost):
+    def item_discount(self,total_cost):
         """Generates a discount on the items ordered and allows 
         customer to pay reduced price for product. Updates total cost.
         Args:
@@ -94,8 +94,16 @@ def num_item_sold(item, amountsold):
     Args:
         item(int): different item types in the stock
         amountsold(int): number of items sold 
-    """    
-       
+ """    
+def option():
+    print("*************************************")
+    print("\tStore's Inventory")
+    print("*************************************")
+    print("\t1.Show All Products")
+    print("\t2.Low Stock")
+    print("\t3.Number of item sold")
+    print("**************************************")   
+        
 def main(filename):
     e = StoreInventory(filename)
     limit = 10
@@ -109,10 +117,14 @@ def parse_args(arglist):
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
-    main(args.filename)
-    x = StoreInventory("inventory.csv")
-    g = x.stocked()
-    print (g)
+    option()
+    choice = int(input())
+    if choice == 1:
+        x = StoreInventory("inventory.csv")
+        g = x.stocked()
+        print (g)
+    elif choice == 2:
+        main(args.filename) 
 
     
     
