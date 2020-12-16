@@ -58,7 +58,7 @@ class StoreInventory():
             for item in good:
                 print(f'Order more {item}')
         
-    def stocked(self,filename):
+    def stocked(self):
         """
         This function keeps tracks of how many item we have in our current stock 
         by different categories
