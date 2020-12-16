@@ -124,7 +124,11 @@ if __name__ == "__main__":
         g = x.stocked()
         print (g)
     elif choice == 2:
-        main(args.filename) 
+        main(args.filename)  
+    elif choice == 3:
+        g = num_item_sol(amountsold)
+        print(g)
+        
 
     
     
