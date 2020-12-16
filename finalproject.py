@@ -94,16 +94,8 @@ def num_item_sold(item, amountsold):
     Args:
         item(int): different item types in the stock
         amountsold(int): number of items sold 
- """    
-def option():
-    print("*************************************")
-    print("\tStore's Inventory")
-    print("*************************************")
-    print("\t1.Show All Products")
-    print("\t2.Low Stock")
-    print("\t3.Number of item sold")
-    print("**************************************")   
-        
+    """
+
 def main(filename):
     e = StoreInventory(filename)
     limit = 10
