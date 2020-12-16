@@ -94,8 +94,8 @@ def num_item_sold(item, amountsold):
     Args:
         item(int): different item types in the stock
         amountsold(int): number of items sold 
-    """    
-       
+    """
+
 def main(filename):
     e = StoreInventory(filename)
     limit = 10
