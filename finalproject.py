@@ -103,8 +103,12 @@ def num_item_sold(item, amountsold):
         item(int): different item types in the stock
         amountsold(int): number of items sold 
     """
-
+    data1 = pd.read_csv("Item_sold.csv", sep=",")
+    col =["Item Name","Units Sold"]
+    df3 = data1[col]
     
+    print("Units of items sold\n")
+    print (df3)
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
