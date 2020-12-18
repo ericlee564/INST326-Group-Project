@@ -58,14 +58,14 @@ class StoreInventory():
             for item in good:
                 print(f'Order more {item}')
         
-    def stocked(self):
+    def stocked(self, filename):
         """
         This function keeps tracks of how many item we have in our current stock 
         by different categories
         Args:
             filename (str): name of the file     
         """
-        data = pd.read_csv("inventory.csv", sep=",",index_col="Category")
+        data = pd.read_csv(filename, sep=",",index_col="Category")
         cols =["Item Name","Amount","Price ($)"]
         df2 = data[cols]
         print("Number of items in the current stock\n")
@@ -78,11 +78,19 @@ class StoreInventory():
             item (str): name of item for coupon
             category (str): type of category of food within grocery store
         Returns:
-            String of the item discounted
+            string of information for the item discounted
         """
+        cursor = self.conn.cursor()
+        selected = f"SELECT item FROM inventory WHERE amount < {30}"
+        limited = cursor.execute(selected).fetchall()
+        #Updates with 15% off product
+        for items in limited:
+            for product in items:
+                cursor.execute("UPDATE inventory SET price = {(price * .85)} WHERE amount < {30}")
+        return ""
 
     def item_discount(self,total_cost):
-        """Generates a discount on the items ordered and allows 
+        """Generates a discount on certain items ordered and allows 
         customer to pay reduced price for product. Updates total cost.
         Args:
             total_cost (float): total cost of all items ordered
@@ -99,6 +107,11 @@ def num_item_sold(item, amountsold):
     
 
 def option():
+    '''Instruction for the user to prompt them to next steps in checking inventory
+    
+    Return:
+        Strings of instructions
+    '''
     print("*************************************")
     print("\tStore's Inventory")
     print("*************************************")
@@ -109,8 +122,17 @@ def option():
     
 
 def main(filename):
+    """Build a database according to the file and take user input to decide the minimum of each 
+    item before more needs to be ordered
+    
+    Args:
+        filename(str): path to a file
+    
+    Return:
+        A string of an item that needs to be ordered
+    """
     e = StoreInventory(filename)
-    limit = 10
+    limit = int(input('Limit: '))
     return e.order_more(limit)
 
 def parse_args(arglist):
@@ -124,8 +146,8 @@ if __name__ == "__main__":
     option()
     choice = int(input())
     if choice == 1:
-        x = StoreInventory("inventory.csv")
-        g = x.stocked()
+        x = StoreInventory(args.filename)
+        g = x.stocked(args.filename)
         print (g)
     elif choice == 2:
         main(args.filename)  
