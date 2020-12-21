@@ -96,8 +96,8 @@ class StoreInventory():
             total_cost (float): total cost of all items ordered
         Returns: 
             String with the given discount for specific product"""
-
-def num_item_sold(item, amountsold):
+    
+    def num_item_sold(item, filename):
     """This function keeps tracks of number of all items sold and updates the database 
     Args:
         item(int): different item types in the stock
@@ -109,6 +109,20 @@ def num_item_sold(item, amountsold):
     
     print("Units of items sold\n")
     print (df3)
+    
+    def update_stocked(self, filename, item_sold_file):
+        """      
+        """        
+        stocked = self.stocked(filename)        
+        units_sold = self.num_item_sold(item_sold_file)       
+        updated_df = stocked.merge(units_sold, on = "Item Name")  
+        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
+        print(updated_df)        
+        return updated_df
+        
+    
+
+
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
@@ -142,7 +156,8 @@ def main(filename):
 def parse_args(arglist):
     """ Parse command-line arguments. """
     parser = ArgumentParser()
-    parser.add_argument("filename", help="path to Inventory CSV file")
+    parser.add_argument("inventory_filename", help="path to Inventory CSV file")
+    parser.add_argument("items_sold_filename", help="path to Item Sold CSV file")
     return parser.parse_args(arglist)
 
 if __name__ == "__main__":
