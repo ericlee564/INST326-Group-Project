@@ -120,10 +120,6 @@ class StoreInventory():
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
         print(updated_df)        
         return updated_df
-        
-    
-
-
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
