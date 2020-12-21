@@ -78,7 +78,7 @@ class StoreInventory():
             item (str): name of item for coupon
             category (str): type of category of food within grocery store
         Returns:
-            string of information for the item discounted
+            string of information for the item(s) discounted
         """
         cursor = self.conn.cursor()
         selected = f"SELECT item FROM inventory WHERE amount < {30}"
@@ -87,7 +87,7 @@ class StoreInventory():
         for items in limited:
             for product in items:
                 cursor.execute("UPDATE inventory SET price = {(price * .85)} WHERE amount < {30}")
-        return ""
+        return "{product} "
 
     def item_discount(self,total_cost):
         """Generates a discount on certain items ordered and allows 
