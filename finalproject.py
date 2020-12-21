@@ -97,7 +97,7 @@ class StoreInventory():
         Returns: 
             String with the given discount for specific product"""
     
-    def num_item_sold(item, filename:
+    def num_item_sold(item, filename):
     """This function keeps tracks of number of all items sold and updates the database 
     Args:
         item(int): different item types in the stock
@@ -119,6 +119,7 @@ class StoreInventory():
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
         print(updated_df)        
         return updated_df
+    
 
 
 
