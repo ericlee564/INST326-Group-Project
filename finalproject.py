@@ -11,37 +11,23 @@ class StoreInventory():
     Attributes:
         self.conn: in memory database connection
         """
-    def __init__(self, filename):
-        self.conn = sqlite3.connect(':memory:')
-        self.addinventory(filename)
-    def __del__(self):
-        """ Clean up the database connection. """
-        try:
-            self.conn.close()
-        except:
-            pass
-    def addinventory(self, filename):
-        """ Creates a database of an inventory using a csv file
+    def __init__(self, inventory_file, items_sold_file):
+        self.inventory_file = inventory_file
+        self.items_sold_file = items_sold_file 
         
-        Args:
-            filename (str): name of file
-        Side Effects:
-            Creation of database
+    def stocked(self):
         """
-        cursor = self.conn.cursor()
-        cq = '''CREATE TABLE inventory
-                (item text, price real, amount integer, category text)'''
-        cursor.execute(cq)
-        with open(filename, 'r', encoding = 'utf-8') as f:
-            headers = next(f)
-            for row in f:
-                values = row.split(',')
-                data = (values[0], float(values[1]), int(values[2]), values[3])
-                item, price, amount, category = data
-                iq = '''INSERT INTO inventory VALUES (?,?,?,?)'''
-                cursor.execute(iq, data)
-        self.conn.commit()
-    def order_more(self, limit):
+        This function keeps tracks of how many item we have in our current stock 
+        by different categories
+        Args:
+            filename (str): name of the file     
+        """
+        data = pd.read_csv(self.inventory_file, sep=",",index_col="Category")
+        cols =["Item Name","Amount","Price ($)"]
+        df2 = data[cols]
+        return df2
+    
+    def low_inventory(self, limit):
         '''Print the name of item that is running low. The amount that is defined as running
         low is based on the limit.
         
@@ -51,25 +37,10 @@ class StoreInventory():
         Return:
             String of items that are equal to the limit. 
         '''
-        cursor = self.conn.cursor()
-        sq = f"SELECT item FROM inventory WHERE amount = {limit}"
-        goods = cursor.execute(sq).fetchall()
-        for good in goods:
-            for item in good:
-                print(f'Order more {item}')
+        stocked = self.stocked()
+        low_inventory = stocked[stocked["Amount"]<=int(limit)]
+        return low_inventory
         
-    def stocked(self, filename):
-        """
-        This function keeps tracks of how many item we have in our current stock 
-        by different categories
-        Args:
-            filename (str): name of the file     
-        """
-        data = pd.read_csv(filename, sep=",",index_col="Category")
-        cols =["Item Name","Amount","Price ($)"]
-        df2 = data[cols]
-        return df2
-
     def coupon_generator(self):
         """Creates coupon for specific category of food based off how much is left
         in the inventory
@@ -79,14 +50,10 @@ class StoreInventory():
         Returns:
             string of information for the item(s) discounted
         """
-        cursor = self.conn.cursor()
-        selected = f"SELECT item FROM inventory WHERE amount < {30}"
-        limited = cursor.execute(selected).fetchall()
+        stocked = self.stocked()
+        limited = stocked[stocked['Amount']<30]
         #Updates with 15% off product
-        for items in limited:
-            for product in items:
-                cursor.execute(f"UPDATE inventory SET price = price * {.85} WHERE amount < {30}")
-                return f"15% off {product} while supplies last"
+        return limited
 
     def item_discount(self,total_cost):
         """Generates a discount on certain items ordered and allows 
@@ -96,18 +63,18 @@ class StoreInventory():
         Returns: 
             String with the given discount for specific product"""
     
-    def num_item_sold(self, filename):
+    def num_item_sold(self):
         """This function keeps tracks of number of all items sold and updates the database 
             Args:
                 item(int): different item types in the stock
                 amountsold(int): number of items sold 
         """
-        data1 = pd.read_csv("Item_sold.csv", sep=",")
+        data1 = pd.read_csv(self.items_sold_file, sep=",")
         col =["Item Name","Units Sold"]
         df3 = data1[col]
         return df3
     
-    def update_stocked(self, inventory_file, item_sold_file):
+    def update_stocked(self):
         """Updates the dataframe returned from stocked method according to the dataframe 
         returned by the num_item_sold dataframe
         
@@ -118,8 +85,8 @@ class StoreInventory():
         Return:
             Dataframe of updated stocked items      
         """        
-        stocked = self.stocked(inventory_file)        
-        units_sold = self.num_item_sold(item_sold_file)       
+        stocked = self.stocked()     
+        units_sold = self.num_item_sold()       
         updated_df = stocked.merge(units_sold, on = "Item Name")  
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]           
         return updated_df
@@ -141,7 +108,7 @@ def option():
     print("**************************************")    
     
 
-def order(filename):
+def main(inventory_file, items_sold_file):
     """Build a database according to the file and take user input to decide the minimum of each 
     item before more needs to be ordered
     
@@ -151,9 +118,26 @@ def order(filename):
     Return:
         A string of an item that needs to be ordered
     """
-    e = StoreInventory(filename)
-    limit = int(input('Limit: '))
-    return e.order_more(limit)
+    option()
+    choice = int(input())
+    x = StoreInventory(inventory_file, items_sold_file)
+    if choice == 1:
+        g = x.stocked()
+        print("Number of items in the current stock\n")
+        print (g)
+    elif choice == 2:
+        limit = input('Low Inventory Number: ')
+        g = x.low_inventory(limit)  
+        print(g)
+    elif choice == 3:
+        g = x.num_item_sold()
+        print(g)
+    elif choice == 4:
+        g = x.update_stocked()
+        print(g)
+    elif choice == 5:
+        g = x.coupon_generator()
+        print(g)
 
 def parse_args(arglist):
     """ Parse command-line arguments. """
@@ -164,24 +148,7 @@ def parse_args(arglist):
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
-    option()
-    choice = int(input())
-    x = StoreInventory(args.inventory_filename)
-    if choice == 1:
-        g = x.stocked(args.inventory_filename)
-        print("Number of items in the current stock\n")
-        print (g)
-    elif choice == 2:
-        main(args.inventory_filename)  
-    elif choice == 3:
-        g = x.num_item_sold(args.items_sold_filename)
-        print(g)
-    elif choice == 4:
-        g = x.update_stocked(args.inventory_filename, args.items_sold_filename)
-        print(g)
-    elif choice == 5:
-        g = x.coupon_generator()
-        print(g)
+    main(args.inventory_filename, args.items_sold_filename)
         
 
     
