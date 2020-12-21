@@ -107,10 +107,18 @@ class StoreInventory():
         df3 = data1[col]
         return df3
     
-    def update_stocked(self, filename, item_sold_file):
-        """      
+    def update_stocked(self, inventory_file, item_sold_file):
+        """Updates the dataframe returned from stocked method according to the dataframe 
+        returned by the num_item_sold dataframe
+        
+        Args 
+            inventory_file(str): path to inventory csv
+            item_sold_file(str): path to sold items csv
+            
+        Return:
+            Dataframe of updated stocked items      
         """        
-        stocked = self.stocked(filename)        
+        stocked = self.stocked(inventory_file)        
         units_sold = self.num_item_sold(item_sold_file)       
         updated_df = stocked.merge(units_sold, on = "Item Name")  
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]           
@@ -133,7 +141,7 @@ def option():
     print("**************************************")    
     
 
-def main(filename):
+def order(filename):
     """Build a database according to the file and take user input to decide the minimum of each 
     item before more needs to be ordered
     
