@@ -115,10 +115,6 @@ class StoreInventory():
         updated_df = stocked.merge(units_sold, on = "Item Name")  
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]           
         return updated_df
-        
-    
-
-
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
