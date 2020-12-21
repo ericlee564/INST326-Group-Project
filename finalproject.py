@@ -53,7 +53,9 @@ class StoreInventory():
         stocked = self.stocked()
         limited = stocked[stocked['Amount']<30]
         #Updates with 15% off product
+        limited['Price ($)'] *= 0.85
         return limited
+        
 
     def item_discount(self,total_cost):
         """Generates a discount on certain items ordered and allows 
