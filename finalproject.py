@@ -68,17 +68,16 @@ class StoreInventory():
         data = pd.read_csv(filename, sep=",",index_col="Category")
         cols =["Item Name","Amount","Price ($)"]
         df2 = data[cols]
-        print("Number of items in the current stock\n")
-        print (df2)
+        return df2
 
-    def coupon_generator(self,item, category):
+    def coupon_generator(self):
         """Creates coupon for specific category of food based off how much is left
         in the inventory
         Args:
             item (str): name of item for coupon
             category (str): type of category of food within grocery store
         Returns:
-            string of information for the item discounted
+            string of information for the item(s) discounted
         """
         cursor = self.conn.cursor()
         selected = f"SELECT item FROM inventory WHERE amount < {30}"
@@ -86,8 +85,8 @@ class StoreInventory():
         #Updates with 15% off product
         for items in limited:
             for product in items:
-                cursor.execute("UPDATE inventory SET price = {(price * .85)} WHERE amount < {30}")
-        return ""
+                cursor.execute(f"UPDATE inventory SET price = price * {.85} WHERE amount < {30}")
+                return f"15% off {product} while supplies last"
 
     def item_discount(self,total_cost):
         """Generates a discount on certain items ordered and allows 
@@ -97,18 +96,16 @@ class StoreInventory():
         Returns: 
             String with the given discount for specific product"""
     
-    def num_item_sold(item, filename):
-    """This function keeps tracks of number of all items sold and updates the database 
-    Args:
-        item(int): different item types in the stock
-        amountsold(int): number of items sold 
-    """
-    data1 = pd.read_csv("Item_sold.csv", sep=",")
-    col =["Item Name","Units Sold"]
-    df3 = data1[col]
-
-    print("Units of items sold\n")
-    print (df3)
+    def num_item_sold(self, filename):
+        """This function keeps tracks of number of all items sold and updates the database 
+            Args:
+                item(int): different item types in the stock
+                amountsold(int): number of items sold 
+        """
+        data1 = pd.read_csv("Item_sold.csv", sep=",")
+        col =["Item Name","Units Sold"]
+        df3 = data1[col]
+        return df3
     
     def update_stocked(self, filename, item_sold_file):
         """      
@@ -116,8 +113,7 @@ class StoreInventory():
         stocked = self.stocked(filename)        
         units_sold = self.num_item_sold(item_sold_file)       
         updated_df = stocked.merge(units_sold, on = "Item Name")  
-        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
-        print(updated_df)        
+        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]           
         return updated_df
 
 def option():
@@ -132,6 +128,8 @@ def option():
     print("\t1.Show All Products")
     print("\t2.Low Stock")
     print("\t3.Number of item sold")
+    print("\t4.Updated Stock")
+    print("\t5.Generate Coupons")
     print("**************************************")    
     
 
@@ -160,14 +158,21 @@ if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
     option()
     choice = int(input())
+    x = StoreInventory(args.inventory_filename)
     if choice == 1:
-        x = StoreInventory(args.filename)
-        g = x.stocked(args.filename)
+        g = x.stocked(args.inventory_filename)
+        print("Number of items in the current stock\n")
         print (g)
     elif choice == 2:
-        main(args.filename)  
+        main(args.inventory_filename)  
     elif choice == 3:
-        g = num_item_sol(amountsold)
+        g = x.num_item_sold(args.items_sold_filename)
+        print(g)
+    elif choice == 4:
+        g = x.update_stocked(args.inventory_filename, args.items_sold_filename)
+        print(g)
+    elif choice == 5:
+        g = x.coupon_generator()
         print(g)
         
 
