@@ -69,8 +69,7 @@ class StoreInventory():
         cols =["Item Name","Amount","Price ($)"]
         df2 = data[cols]
         print("Number of items in the current stock\n")
-        return df2
-        
+        print (df2)
 
     def coupon_generator(self,item, category):
         """Creates coupon for specific category of food based off how much is left
@@ -98,7 +97,7 @@ class StoreInventory():
         Returns: 
             String with the given discount for specific product"""
     
-    def num_item_sold(self, filename):
+    def num_item_sold(item, filename:
     """This function keeps tracks of number of all items sold and updates the database 
     Args:
         item(int): different item types in the stock
@@ -107,18 +106,21 @@ class StoreInventory():
     data1 = pd.read_csv("Item_sold.csv", sep=",")
     col =["Item Name","Units Sold"]
     df3 = data1[col]
+    
     print("Units of items sold\n")
-    return df3
-
+    print (df3)
+    
     def update_stocked(self, filename, item_sold_file):
-        """ 
-        """
-        stocked = self.stocked(filename)
-        units_sold = self.num_item_sold(item_sold_file)
-        updated_df = stocked.merge(units_sold, on = "Item Name")
-        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]
-        print(updated_df)
+        """      
+        """        
+        stocked = self.stocked(filename)        
+        units_sold = self.num_item_sold(item_sold_file)       
+        updated_df = stocked.merge(units_sold, on = "Item Name")  
+        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
+        print(updated_df)        
         return updated_df
+
+
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
@@ -152,7 +154,8 @@ def main(filename):
 def parse_args(arglist):
     """ Parse command-line arguments. """
     parser = ArgumentParser()
-    parser.add_argument("filename", help="path to Inventory CSV file")
+    parser.add_argument("inventory_filename", help="path to Inventory CSV file")
+    parser.add_argument("items_sold_filename", help="path to Item Sold CSV file")
     return parser.parse_args(arglist)
 
 if __name__ == "__main__":
