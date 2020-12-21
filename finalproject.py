@@ -69,7 +69,8 @@ class StoreInventory():
         cols =["Item Name","Amount","Price ($)"]
         df2 = data[cols]
         print("Number of items in the current stock\n")
-        print (df2)
+        return df2
+        
 
     def coupon_generator(self,item, category):
         """Creates coupon for specific category of food based off how much is left
@@ -96,8 +97,8 @@ class StoreInventory():
             total_cost (float): total cost of all items ordered
         Returns: 
             String with the given discount for specific product"""
-
-def num_item_sold(item, amountsold):
+    
+    def num_item_sold(self, filename):
     """This function keeps tracks of number of all items sold and updates the database 
     Args:
         item(int): different item types in the stock
@@ -106,9 +107,18 @@ def num_item_sold(item, amountsold):
     data1 = pd.read_csv("Item_sold.csv", sep=",")
     col =["Item Name","Units Sold"]
     df3 = data1[col]
-    
     print("Units of items sold\n")
-    print (df3)
+    return df3
+
+    def update_stocked(self, filename, item_sold_file):
+        """ 
+        """
+        stocked = self.stocked(filename)
+        units_sold = self.num_item_sold(item_sold_file)
+        updated_df = stocked.merge(units_sold, on = "Item Name")
+        updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]
+        print(updated_df)
+        return updated_df
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
