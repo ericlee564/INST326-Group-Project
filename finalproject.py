@@ -106,7 +106,7 @@ class StoreInventory():
     data1 = pd.read_csv("Item_sold.csv", sep=",")
     col =["Item Name","Units Sold"]
     df3 = data1[col]
-    
+
     print("Units of items sold\n")
     print (df3)
     
@@ -119,10 +119,6 @@ class StoreInventory():
         updated_df["Amount"] = updated_df["Amount"] - updated_df["Units Sold"]     
         print(updated_df)        
         return updated_df
-        
-    
-
-
 
 def option():
     '''Instruction for the user to prompt them to next steps in checking inventory
