@@ -106,7 +106,7 @@ def option():
     print("\t3.Number of item sold")
     print("\t4.Updated Stock")
     print("\t5.Generate Coupons")
-    print("\t6.Item Discount")
+    print("\t6.Stock by Category")
     print("**************************************")    
     
 
