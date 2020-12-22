@@ -41,3 +41,9 @@ def test_stocked():
     assert i.iloc[2]["Price ($)"] == 1.25
     assert i.iloc[2]["Amount"] == 75
     assert i.iloc[7]["Amount"] == 50
+    
+def test_coupon():
+    x = StoreInventory("inventory.csv", "item_sold.csv")
+    i = x.coupon_generator()
+    assert i.iloc[0]["Item Name"] == "Watermelon"
+        

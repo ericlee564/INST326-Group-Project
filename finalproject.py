@@ -24,8 +24,8 @@ class StoreInventory():
         Return: 
             Pandas dataframe of the inventory  
         """
-        data = pd.read_csv(self.inventory_file, sep=",",index_col="Category")
-        cols =["Item Name","Amount","Price ($)"]
+        data = pd.read_csv(self.inventory_file, sep=",")
+        cols =["Item Name","Category", "Amount","Price ($)"]
         df2 = data[cols]
         return df2
     
@@ -56,23 +56,17 @@ class StoreInventory():
         limited['Price ($)'] *= 0.85
         return limited
         
-    def item_discount(self):
-        """Generates discount for chosen item based on category and allows 
-        customer to pay reduced price for product.
+    def item_display(self):
+        """Displays categorized products, quantities, and prices based on user request.
             
         Returns: 
-            String with the discounted product"""
+            List of products by category"""
         
-        print("Enter category for discount (Fruits, Vegetable, Snacks, Drinks): ")
+        print("Enter category to view products (Fruits, Vegetable, Snacks, Drinks): ")
         cat = str(input())
-        
         stocked = self.stocked()
         selected = stocked[stocked['Category'] == cat]
-        #selected = f"SELECT item FROM inventory WHERE category = '{cat}'"
-        #catList = cursor.execute(selected).fetchall()
-        
-        print(selected) 
-        #return catList
+        return selected
     
     def num_item_sold(self):
         """This function keeps tracks of number of all items sold
@@ -148,7 +142,7 @@ def main(inventory_file, items_sold_file):
         g = x.coupon_generator()
         print(g)
     elif choice == 6:
-        g = x.item_discount()
+        g = x.item_display()
         print(g)
 
 def parse_args(arglist):
