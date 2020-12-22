@@ -2,15 +2,17 @@
 
 from argparse import ArgumentParser
 import sys
-import sqlite3
 import pandas as pd
 
 class StoreInventory():
-    """Creates a database connection of an inventory from given file and uses different
-    capabilities to let the user work with the inventory
+    """Creates a pandas dataframes from csv files and uses these dataframes to alert the user
+    of low inventory, generate potential coupons, and update the inventory based on items
+    sold.
+    
     Attributes:
-        self.conn: in memory database connection
-        """
+        inventory_file(str): path to an inventory csv file
+        items_sold_file(str): path to a items sold csv file
+    """
     def __init__(self, inventory_file, items_sold_file):
         self.inventory_file = inventory_file
         self.items_sold_file = items_sold_file 
@@ -19,8 +21,8 @@ class StoreInventory():
         """
         This function keeps tracks of how many item we have in our current stock 
         by different categories
-        Args:
-            filename (str): name of the file     
+        Return: 
+            Pandas dataframe of the inventory  
         """
         data = pd.read_csv(self.inventory_file, sep=",",index_col="Category")
         cols =["Item Name","Amount","Price ($)"]
@@ -35,7 +37,7 @@ class StoreInventory():
             limit(int): integer number of when the user thinks an item amount is too low
         
         Return:
-            String of items that are equal to the limit. 
+            Dataframe of items based less than or equal to the limit. 
         '''
         stocked = self.stocked()
         low_inventory = stocked[stocked["Amount"]<=int(limit)]
@@ -44,11 +46,9 @@ class StoreInventory():
     def coupon_generator(self):
         """Creates coupon for specific category of food based off how much is left
         in the inventory
-        Args:
-            item (str): name of item for coupon
-            category (str): type of category of food within grocery store
+        
         Returns:
-            string of information for the item(s) discounted
+            Dataframe of information for the item(s) discounted and their discounted price.
         """
         stocked = self.stocked()
         limited = stocked[stocked['Amount']<30]
@@ -56,7 +56,6 @@ class StoreInventory():
         limited['Price ($)'] *= 0.85
         return limited
         
-
     def item_discount(self,total_cost):
         """Generates a discount on certain items ordered and allows 
         customer to pay reduced price for product. Updates total cost.
@@ -66,10 +65,10 @@ class StoreInventory():
             String with the given discount for specific product"""
     
     def num_item_sold(self):
-        """This function keeps tracks of number of all items sold and updates the database 
-            Args:
-                item(int): different item types in the stock
-                amountsold(int): number of items sold 
+        """This function keeps tracks of number of all items sold
+        
+        Return:
+            Dataframe of the name of items sold and how many units of each was sold    
         """
         data1 = pd.read_csv(self.items_sold_file, sep=",")
         col =["Item Name","Units Sold"]
@@ -79,10 +78,6 @@ class StoreInventory():
     def update_stocked(self):
         """Updates the dataframe returned from stocked method according to the dataframe 
         returned by the num_item_sold dataframe
-        
-        Args 
-            inventory_file(str): path to inventory csv
-            item_sold_file(str): path to sold items csv
             
         Return:
             Dataframe of updated stocked items      
@@ -111,14 +106,15 @@ def option():
     
 
 def main(inventory_file, items_sold_file):
-    """Build a database according to the file and take user input to decide the minimum of each 
-    item before more needs to be ordered
+    """Builds a dataframe using two files and using different functions, provides information 
+    about the inventory
     
     Args:
-        filename(str): path to a file
+        inventory_file(str): path to a inventory file
+        items_sold_file(str): path to a number of items sold file
     
     Return:
-        A string of an item that needs to be ordered
+        A dataframe depending on what the user selects in the option() function
     """
     option()
     choice = int(input())
