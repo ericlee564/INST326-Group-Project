@@ -17,5 +17,21 @@ How to Use Program/Interpret Results:
     After the user selects their prompt, depending on the selection, they will either be provided a dataframe or an input option. For the input option, the user follows the prompt. A dataframe representing the user's desired information is the output. 
 
 
+Bibliography
+    Pandas Documentation: https://pandas.pydata.org/pandas-docs/stable/reference/frame.html
+        We used the Pandas documentation for assistance with the module and to better understand the capabilities Pandas has including:
+            Subtracting and multiplying columns 
+            Filtering 
+            Merging
 
+    Pandas Filtering Data frames: https://umd.instructure.com/courses/1288445/quizzes/1381192?module_item_id=10350868 
+        We used Pandas in order to filter through a data frame and to merge data frames to combine two relating columns within that data frame. Some of the pandas we used were:
+            Filtering and Merging
+
+    Terminal Commands and ArgParse: https://umd.instructure.com/courses/1288445/quizzes/1365188?module_item_id=10239162
+        The course content earlier in the semester helped us to create command line arguments to use our script. 
+
+
+    Used a youtube video for displaying the content https://www.youtube.com/watch?v=qUYMRiP2KDw
+        We get some inspiration from this youtube video about how we want to display the options in our program. We used conditional statements in the main function to display the content of each method.
 
