@@ -35,7 +35,7 @@ class StoreInventory():
         with open(filename, 'r', encoding = 'utf-8') as f:
             headers = next(f)
             for row in f:
-                values = row.split(',')
+                values = row.strip().split(',')
                 data = (values[0], float(values[1]), int(values[2]), values[3])
                 item, price, amount, category = data
                 iq = '''INSERT INTO inventory VALUES (?,?,?,?)'''
@@ -82,20 +82,30 @@ class StoreInventory():
         cursor = self.conn.cursor()
         selected = f"SELECT item FROM inventory WHERE amount < {30}"
         limited = cursor.execute(selected).fetchall()
-        #Updates with 15% off product
+        
         for items in limited:
             for product in items:
                 cursor.execute(f"UPDATE inventory SET price = price * {.85} WHERE amount < {30}")
                 return f"15% off {product} while supplies last"
 
-    def item_discount(self,total_cost):
-        """Generates a discount on certain items ordered and allows 
-        customer to pay reduced price for product. Updates total cost.
-        Args:
-            total_cost (float): total cost of all items ordered
+    def item_discount(self):
+        """Generates discount for chosen item based on category and allows 
+        customer to pay reduced price for product.
+            
         Returns: 
-            String with the given discount for specific product"""
-    
+            String with the discounted product"""
+        
+        print("Enter category for discount (Fruits, Vegetables, Snacks, Drinks): ")
+        cat = str(input())
+        
+        cursor = self.conn.cursor()
+        selected = f"SELECT item FROM inventory WHERE category = '{cat}'"
+        catList = cursor.execute(selected).fetchall()
+        
+        # update the inventory with discounted item
+        
+        return catList
+            
     def num_item_sold(self, filename):
         """This function keeps tracks of number of all items sold and updates the database 
             Args:
@@ -130,6 +140,7 @@ def option():
     print("\t3.Number of item sold")
     print("\t4.Updated Stock")
     print("\t5.Generate Coupons")
+    print("\t6.Item Discount")
     print("**************************************")    
     
 
@@ -173,6 +184,9 @@ if __name__ == "__main__":
         print(g)
     elif choice == 5:
         g = x.coupon_generator()
+        print(g)
+    elif choice == 6:
+        g = x.item_discount()
         print(g)
         
 
