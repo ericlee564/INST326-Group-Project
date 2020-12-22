@@ -31,3 +31,9 @@ def test_low_inventory():
     assert highest_number.iloc[11]['Item Name'] == 'Water'
     assert highest_number.iloc[12]['Item Name'] == 'Cola'
     assert highest_number.iloc[13]['Item Name'] == 'Gummy Worms'
+    
+def test_stocked():
+    x = StoreInventory("inventory.csv", "item_sold.csv")
+    i = x.stocked()
+    assert i.iloc[0]["Item Name"] == "Strawberry"
+        
